@@ -1,10 +1,54 @@
 <head>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <!-- Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
-    <div id="graph"></div>
-    <div><button onclick="startAnimation();"><code>'Start'</code></button></div>
-</body>
 
-<script src="../static/script.js"></script>
+<div class="main-title">
+    <h2>matmod</h2>
+</div>
+
+<div class="description">
+    <h5>solar system simulator</h5>
+</div>
+
+<div class="main-container">
+    <div class="container">
+        <div id="plot1"><!-- Plotly chart will be drawn inside this DIV --></div>
+        <div id="plot2"><!-- Plotly chart will be drawn inside this DIV --></div>
+    </div>
+    <div class="right-container">
+        <div class="container">
+            <form class="form" action="" id="form">
+                <div class="input-control">
+                    <label for="d">Number of planets</label>
+                    <input type="number" value="3" step="1" id="d" name="d" required onkeypress="return charCode!==45">
+                </div>
+                <div class="input-control">
+                    <label for="l">L</label>
+                    <input type="number" value="12" step="0.0000001" id="l" name="l" required onkeypress="return charCode!==45">
+                    <h6>length of bar</h6>
+                </div>
+                <div class="input-control">
+                    <label for="t">T</label>
+                    <input type="number" value="150" step="0.0000001" id="t" name="t" required onkeypress="return charCode!==45">
+                    <h6>duration of process</h6>
+                </div>
+                <div class="input-control">
+                    <label for="e">E</label>
+                    <input type="number" value="0.01" step="0.0000001" id="e" name="e" required onkeypress="return charCode!==45">
+                    <h6>precision</h6>
+                </div>
+                <div class="input-control">
+                    <input class="submit-btn gradient-background" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../static/js/plot.js"></script>
+</body>
