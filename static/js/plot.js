@@ -1,40 +1,65 @@
-function getDataFromBackend() {
-    return [
-        {
-            x: [0, 0, 0, 0],
-            y: [0, 0, 0, 0],
-        },
-        {
-            x: [1, 2, 3, 4],
-            y: [-1, -2, -3, -4],
-        },
-        {
-            x: [1.5, 1.5, 2.5, 2.5],
-            y: [1.5, 1.5, 2.5, 2.5],
-        },
-    ]
+const submitBtn = document.querySelector('.submit-btn');
+submitBtn.addEventListener('click', function (event) {
+    const n = parseInt(document.querySelector('#n').value);
+    const s = parseInt(document.querySelector('#s').value);
+    const d = parseInt(document.querySelector('#d').value);
+    const scheme = document.querySelector('input[name="radio"]:checked').value;
+
+    const x_array = Array.from(document.querySelectorAll('.__x')).map(input => input.value);
+    const y_array = Array.from(document.querySelectorAll('.__y')).map(input => input.value);
+    const vx_array = Array.from(document.querySelectorAll('.vx')).map(input => input.value);
+    const vy_array = Array.from(document.querySelectorAll('.vy')).map(input => input.value);
+    const mass_array = Array.from(document.querySelectorAll('.mass')).map(input => input.value);
+
+    const data = {
+        n: n,
+        s: s,
+        d: d,
+        scheme: scheme,
+        x_array: x_array,
+        y_array: y_array,
+        vx_array: vx_array,
+        vy_array: vy_array,
+        mass_array: mass_array,
+    };
+
+    console.log("data", data);
+    event.preventDefault();
+    console.log('START');
+
+    $.getJSON({
+        url: "/draw_plots",
+        data: data,
+        success: function (result) {
+            buildPlots(result);
+        }
+    });
+
+
+    console.log('REFRESHED');
+});
+
+
+function buildPlots(data) {
+    Plotly.purge('plot1');
+    Plotly.plot('plot1', {
+        data: getStartTraces(data),
+        layout: getLayout(data),
+        config: {showSendToCloud: true},
+        frames: getFrames(data),
+    });
+
+    Plotly.purge('plot2');
+    Plotly.plot('plot2', {
+        data: getFullTraces(data),
+        config: {showSendToCloud: true},
+    });
 }
 
-Plotly.plot('plot1', {
-    data: getStartTraces(getDataFromBackend()),
-    layout: getLayout(),
-    config: {showSendToCloud: true},
-    frames: getFrames(getDataFromBackend()),
-});
-
-Plotly.plot('plot2', {
-    data: getFullTraces(getDataFromBackend()),
-    config: {showSendToCloud: true},
-});
-
-function getLayout() {
+function getLayout(data) {
     return {
-        xaxis: {
-
-        },
-        yaxis: {
-
-        },
+        xaxis: {},
+        yaxis: {},
         hovermode: 'closest',
         // We'll use updatemenus (whose functionality includes menus as
         // well as buttons) to create a play button and a pause button.
@@ -81,7 +106,7 @@ function getLayout() {
                 xanchor: 'right',
                 font: {size: 20, color: '#666'}
             },
-            steps: getSteps(getDataFromBackend())
+            steps: getSteps(data)
         }]
     }
 }
