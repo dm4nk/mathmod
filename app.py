@@ -6,21 +6,25 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def index():  # put application's code here
+def index():
     return render_template('index.html')
 
 
-@app.route('/draw_plots', methods=['POST', 'GET'])
+@app.route('/draw_plots', methods=['POST'])
 def draw_plots():
-    return calculate(int(request.args.get('n')),
-                     int(request.args.get('s')),
-                     int(request.args.get('d')),
-                     str(request.args.get('schema')),
-                     request.args.get('x_array'),
-                     request.args.get('y_array'),
-                     request.args.get('vx_array'),
-                     request.args.get('vy_array'),
-                     request.args.get('mass_array'),)
+    print("got a request")
+    request_data = request.get_json()
+    print(request_data)
+
+    return calculate(int(request_data['n']),
+                     int(request_data['s']),
+                     int(request_data['d']),
+                     request_data['schema'],
+                     request_data['x_array'],
+                     request_data['y_array'],
+                     request_data['vx_array'],
+                     request_data['vy_array'],
+                     request_data['mass_array'],)
 
 
 if __name__ == '__main__':

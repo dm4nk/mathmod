@@ -3,19 +3,19 @@ submitBtn.addEventListener('click', function (event) {
     const n = parseInt(document.querySelector('#n').value);
     const s = parseInt(document.querySelector('#s').value);
     const d = parseInt(document.querySelector('#d').value);
-    const scheme = document.querySelector('input[name="radio"]:checked').value;
+    const schema = document.querySelector('input[name="radio"]:checked').value;
 
-    const x_array = Array.from(document.querySelectorAll('.__x')).map(input => input.value);
-    const y_array = Array.from(document.querySelectorAll('.__y')).map(input => input.value);
-    const vx_array = Array.from(document.querySelectorAll('.vx')).map(input => input.value);
-    const vy_array = Array.from(document.querySelectorAll('.vy')).map(input => input.value);
-    const mass_array = Array.from(document.querySelectorAll('.mass')).map(input => input.value);
+    const x_array = Array.from(document.querySelectorAll('.__x')).map(input => parseFloat(input.value));
+    const y_array = Array.from(document.querySelectorAll('.__y')).map(input => parseFloat(input.value));
+    const vx_array = Array.from(document.querySelectorAll('.vx')).map(input => parseFloat(input.value));
+    const vy_array = Array.from(document.querySelectorAll('.vy')).map(input => parseFloat(input.value));
+    const mass_array = Array.from(document.querySelectorAll('.mass')).map(input => parseFloat(input.value));
 
     const data = {
         n: n,
         s: s,
         d: d,
-        scheme: scheme,
+        schema: schema,
         x_array: x_array,
         y_array: y_array,
         vx_array: vx_array,
@@ -25,18 +25,24 @@ submitBtn.addEventListener('click', function (event) {
 
     console.log("data", data);
     event.preventDefault();
-    console.log('START');
 
-    $.getJSON({
+    console.log("START");
+    $.ajax({
+        type: "POST",
         url: "/draw_plots",
-        data: data,
+        data: JSON.stringify(data),
+        contentType: "application/json",
         success: function (result) {
+            console.log(result);
             buildPlots(result);
-        }
+            console.log("REFRESHED");
+        },
+        error: function (result, status) {
+            console.log(result);
+            alert("Unexpected Error. Ty again");
+        },
+        dataType: "json"
     });
-
-
-    console.log('REFRESHED');
 });
 
 
@@ -114,11 +120,11 @@ function getLayout(data) {
 function getStartTraces(data) {
     let traces = [];
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
             //name: continents[i],
-            x: [data[i].x[0]],
-            y: [data[i].y[0]],
+            x: [data.graphs[i].x[0]],
+            y: [data.graphs[i].y[0]],
             //text: data.text.slice(),
             mode: 'markers',
             marker: {
@@ -137,11 +143,11 @@ function getStartTraces(data) {
 function getFullTraces(data) {
     let traces = [];
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
             //name: continents[i],
-            x: data[i].x,
-            y: data[i].y,
+            x: data.graphs[i].x,
+            y: data.graphs[i].y,
             //text: data.text.slice(),
         });
     }
@@ -152,10 +158,16 @@ function getFullTraces(data) {
 
 function getSteps(data) {
     let steps = [];
+    const s = parseInt(document.querySelector('#s').value);
 
-    for (let i = 0; i < data[0].x.length; i++) {
+    for (let i = 0; i < data.graphs[0].x.length; i++) {
+        let label = "Energy: " + data.customData.energy[i] + "\n" +
+            "Current time: " + s * i + "\n" +
+            "Mass vx: " + data.customData.mass_vx[i] + "\n" +
+            "Mass vy: " + data.customData.mass_vy[i];
+
         steps.push({
-            label: i,
+            label: label,
             method: 'animate',
             args: [[i], {
                 mode: 'immediate',
@@ -172,10 +184,10 @@ function getSteps(data) {
 function getFrames(data) {
     let frames = [];
 
-    for (let i = 0; i < data[0].x.length; i++) {
+    for (let i = 0; i < data.graphs[0].x.length; i++) {
         frames.push({
             name: i,
-            data: data.map(planet => {
+            data: data.graphs.map(planet => {
                 return {
                     x: [planet.x[i]],
                     y: [planet.y[i]]
