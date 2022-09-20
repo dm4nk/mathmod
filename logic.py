@@ -1,5 +1,5 @@
 def calculate(n: int,
-              s: int,
+              dt: int,
               d: int,
               schema: str,
               x_array: [float],
@@ -7,7 +7,7 @@ def calculate(n: int,
               vx_array: [float],
               vy_array: [float],
               mass_array: str):
-    print(n, s, d, schema, x_array, y_array, vx_array, vy_array, mass_array)
+    print(n, dt, d, schema, x_array, y_array, vx_array, vy_array, mass_array)
     return {
         'customData': {
             'energy': [1, 2, 3, 4],

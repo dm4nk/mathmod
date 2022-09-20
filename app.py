@@ -16,15 +16,9 @@ def draw_plots():
     request_data = request.get_json()
     print(request_data)
 
-    return calculate(int(request_data['n']),
-                     int(request_data['s']),
-                     int(request_data['d']),
-                     request_data['schema'],
-                     request_data['x_array'],
-                     request_data['y_array'],
-                     request_data['vx_array'],
-                     request_data['vy_array'],
-                     request_data['mass_array'],)
+    return calculate(int(request_data['n']), int(request_data['s']), int(request_data['d']), request_data['schema'],
+                     request_data['x_array'], request_data['y_array'], request_data['vx_array'],
+                     request_data['vy_array'], request_data['mass_array'])
 
 
 if __name__ == '__main__':
