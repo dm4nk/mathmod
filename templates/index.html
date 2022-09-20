@@ -38,7 +38,7 @@
                 <div class="input-control">
                     <label for="n">Number of planets</label>
                     <input type="number" value="2" step="1" id="n" name="n" required
-                           onchange="createForm()">
+                           onchange="onValueChanged()">
                 </div>
                 <div class="input-control">
                     <label for="s">Step</label>
@@ -60,19 +60,17 @@
                         <label for="radio-1">Euler</label>
                     </div>
                     <div class="form_radio_btn">
-                        <input id="radio-2" type="radio" name="radio" value="Verle">
-                        <label for="radio-2">Verle</label>
+                        <input id="radio-2" type="radio" name="radio" value="Runge–Kutta">
+                        <label for="radio-2">Runge–Kutta</label>
                     </div>
+                </div>
 
-                    <div class="form_radio_btn">
-                        <input id="radio-3" type="radio" name="radio" value="Euler-Kramer">
-                        <label for="radio-3">Euler-Kramer</label>
-                    </div>
-
-                    <div class="form_radio_btn">
-                        <input id="radio-4" type="radio" name="radio" value="Biman">
-                        <label for="radio-4">Biman</label>
-                    </div>
+                <p>Disable first plot</p>
+                <div class="switch-buttons">
+                    <label class="switch">
+                        <input id="switch-plot" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
                 </div>
 
                 <div class="input-control">
@@ -93,10 +91,10 @@
 <script src="../static/js/form-creation.js"></script>
 
 <script>
-    createForm();
+    onValueChanged();
 
     let DATA = {
-        customData:{
+        customData: {
             energy: [1, 2, 3, 4],
             mass_vx: [5, 6, 7, 8],
             mass_vy: [9, 10, 11, 12],

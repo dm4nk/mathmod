@@ -8,9 +8,9 @@
 
 body {
   background-color: var(--color-gray-1);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 :root {
@@ -23,7 +23,7 @@ body {
   --color-gray-5: #2a2e35;
   --color-gray-6: #12181b;
   --br-sm-2: 14px;
-  --box-shadow-1: 0 3px 15px rgba(0, 0, 0, 0.3);
+  --box-shadow-1: 0 3px 15px rgba(0, 0, 0, .3);
 }
 
 .main-title h2 {
@@ -47,7 +47,6 @@ body {
   display: grid;
   grid-template-columns: 2fr 1fr;
 }
-
 .main-container .container {
   background-color: var(--color-white);
   padding: var(--br-sm-2);
@@ -56,33 +55,27 @@ body {
   box-shadow: 1px 2px 15px rgba(0, 0, 0, 0.5);
   height: fit-content;
 }
-
 .main-container .container .form .radio-buttons {
   margin: 1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
 }
-
 .main-container .container .form .radio-buttons .form_radio_btn {
-  margin: .3rem;
+  margin: 0.3rem;
 }
-
 .main-container .container .form .radio-buttons .form_radio_btn input[type=radio] {
   display: none;
 }
-
 .main-container .container .form .radio-buttons .form_radio_btn input[type=radio]:checked + label {
   background: var(--color-gray-2);
 }
-
 .main-container .container .form .radio-buttons .form_radio_btn label {
   appearance: none;
   border-radius: 10px;
   font-weight: inherit;
   font-size: inherit;
   font-family: inherit;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   outline: none;
   border: none;
   background-color: var(--color-gray-1);
@@ -93,15 +86,63 @@ body {
   display: flex;
   justify-content: center;
 }
-
+.main-container .container .form .switch-buttons {
+  margin: 1rem;
+}
+.main-container .container .form .switch-buttons .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.main-container .container .form .switch-buttons .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.main-container .container .form .switch-buttons .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.main-container .container .form .switch-buttons .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.main-container .container .form .switch-buttons input:checked + .slider {
+  background-color: #2196F3;
+}
+.main-container .container .form .switch-buttons input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+.main-container .container .form .switch-buttons .slider.round {
+  border-radius: 34px;
+}
+.main-container .container .form .switch-buttons .slider.round:before {
+  border-radius: 50%;
+}
 .main-container .container .form .submit-btn {
   text-align: center;
   color: var(--color-white);
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   outline: none;
   border: none;
 }
-
 .main-container .container .parameters {
   margin: 1rem;
   display: grid;
@@ -114,21 +155,19 @@ body {
 .input-control {
   margin: 1rem;
 }
-
 .input-control input {
   appearance: none;
   border-radius: 10px;
   font-weight: inherit;
   font-size: inherit;
   font-family: inherit;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   outline: none;
   border: none;
   background-color: var(--color-gray-1);
   width: 100%;
   resize: none;
 }
-
 .input-control input[type=number]::-webkit-inner-spin-button,
 .input-control input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -136,21 +175,18 @@ body {
   appearance: none;
   margin: 0;
 }
-
 .input-control input:invalid:required {
-  background-image: linear-gradient(11deg, #ed0d0d 0%, rgba(0, 44, 255, 0.188113) 100%);
+  background-image: linear-gradient(11deg, rgb(237, 13, 13) 0%, rgba(0, 44, 255, 0.1881127451) 100%);
 }
-
 .input-control label {
   font-weight: inherit;
   font-size: inherit;
   font-family: inherit;
   text-transform: uppercase;
 }
-
 .input-control h6 {
   font-weight: inherit;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-family: inherit;
   text-transform: uppercase;
 }
@@ -164,7 +200,6 @@ body {
   background-size: 400% 400%;
   animation: gradient 7s ease infinite;
 }
-
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -181,7 +216,6 @@ table {
   border-collapse: collapse;
   width: 100%;
 }
-
 table th,
 table td {
   text-align: center;
@@ -193,3 +227,5 @@ table td {
   text-align: center;
   margin-bottom: 2rem;
 }
+
+/*# sourceMappingURL=styles.css.map */
