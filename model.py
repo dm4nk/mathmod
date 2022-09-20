@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 gravity = 6.67 / (10 ** 11)
 
@@ -12,8 +13,6 @@ class Planet:
         self.m = m
         self.ax = 0.0
         self.ay = 0.0
-        self.ax_array = []
-        self.ay_array = []
         self.x_array = [x]
         self.y_array = [y]
 
@@ -63,23 +62,27 @@ def calculate_a_to_runge(planets: [Planet], dt: int):
     delta_x = []
     delta_y = []
 
-    for planet in planets:
-        planet.ax_array = []
-        planet.ay_array = []
+    planets_ax = []
+    planets_ay = []
 
     for step in range(0, 4):
         calculate_a(planets, delta_x, delta_y)
         delta_x = []
         delta_y = []
-
+        ax_array = []
+        ay_array = []
         for planet in planets:
-            planet.ax_array.append(planet.ax)
-            planet.ay_array.append(planet.ay)
+            ax_array.append(planet.ax)
+            ay_array.append(planet.ay)
             delta_x.append(planet.ax * dt / 2)
             delta_y.append(planet.ay * dt / 2)
-
+        planets_ax.append(ax_array)
+        planets_ay.append(ay_array)
 
     calculate_a(planets)
+    planets_ax = np.transpose(planets_ax)
+    planets_ay = np.transpose(planets_ay)
+    return planets_ax, planets_ay
 
 
 def calculate_by_euler(planets: [Planet],
@@ -102,23 +105,17 @@ def calculate_by_runge(planets: [Planet],
                        d: int):
     """ Пересчет координат каждой планеты по методу Рунге_Кутты"""
     for t in range(0, d, dt):
-        calculate_a_to_runge(planets, dt)
-        for planet in planets:
-            planet.x += planet.vx * dt + dt * dt * (planet.ax_array[0] + planet.ax_array[1] + planet.ax_array[2]) / 6
-            planet.y += planet.vy * dt + dt * dt * (planet.ay_array[0] + planet.ay_array[1] + planet.ay_array[2]) / 6
+        planets_ax, planets_ay = calculate_a_to_runge(planets, dt)
+        for planet, ax, ay in zip(planets, planets_ax, planets_ay):
+            planet.x += planet.vx * dt + dt * dt * (ax[0] + ax[1] + ax[2]) / 6
+            planet.y += planet.vy * dt + dt * dt * (ay[0] + ay[1] + ay[2]) / 6
             planet.y_array.append(planet.y)
             planet.x_array.append(planet.x)
-            planet.vx += (planet.ax_array[0] + 2 * planet.ax_array[1] + 2 * planet.ax_array[2] + planet.ax_array[
-                3]) * dt / 6
-            planet.vy += (planet.ay_array[0] + 2 * planet.ay_array[1] + 2 * planet.ay_array[2] + planet.ay_array[
-                3]) * dt / 6
+            planet.vx += (ax[0] + 2 * ax[1] + 2 * ax[2] + ax[3]) * dt / 6
+            planet.vy += (ay[0] + 2 * ay[1] + 2 * ay[2] + ay[3]) * dt / 6
 
 
 if __name__ == '__main__':
-    # T = 86400.0
-    # dt = 3600.0
-    # n = 3
-    # schema = 'Eiler'
     x_array = [0.0, 149500000000.0, 299000000000.0]
     # x_array = [0.0, 149500000000.0]
     y_array = [0.0, 0.0, 0.0]
