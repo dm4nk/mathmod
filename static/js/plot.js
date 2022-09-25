@@ -47,13 +47,18 @@ submitBtn.addEventListener('click', function (event) {
 
 
 function buildPlots(data) {
+    const togglePlot = document.querySelector('#switch-plot').checked;
+
     Plotly.purge('plot1');
-    Plotly.plot('plot1', {
-        data: getStartTraces(data),
-        layout: getLayout(data),
-        config: {showSendToCloud: true},
-        frames: getFrames(data),
-    });
+    if (!togglePlot) {
+        Plotly.plot('plot1', {
+            data: getStartTraces(data),
+            layout: getLayout(data),
+            config: {showSendToCloud: true},
+            frames: getFrames(data),
+        });
+    }
+
 
     Plotly.purge('plot2');
     Plotly.plot('plot2', {
