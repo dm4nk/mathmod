@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 gravity = 6.67 / (10 ** 11)
@@ -26,13 +25,12 @@ def init(n: int, x_array: [float], y_array: [float], vx_array: [float], vy_array
     return list_planets
 
 
-def calculate_a(planets: [Planet], delta_x: [float] = [], delta_y: [float] = []):
+def calculate_a(planets: [Planet], delta_x: [float] = None, delta_y: [float] = None):
     """Вычисление ускорения каждой планеты"""
     for planet in planets:
         planet.ax = 0.0
         planet.ay = 0.0
 
-    # есть сдвиг по координате
     if len(delta_x):
         for planet, x, y in zip(planets, delta_x, delta_y):
             planet.x += x
@@ -49,7 +47,6 @@ def calculate_a(planets: [Planet], delta_x: [float] = [], delta_y: [float] = [])
             first_planet.ax += fabs * dx
             first_planet.ay += fabs * dy
 
-    # убираем сдвиг
     if len(delta_x):
         for planet, x, y in zip(planets, delta_x, delta_y):
             planet.x -= x
@@ -61,10 +58,8 @@ def calculate_a_to_runge(planets: [Planet], dt: int):
 
     delta_x = []
     delta_y = []
-
     planets_ax = []
     planets_ay = []
-
     for step in range(0, 4):
         calculate_a(planets, delta_x, delta_y)
         delta_x = []
@@ -78,17 +73,44 @@ def calculate_a_to_runge(planets: [Planet], dt: int):
             delta_y.append(planet.ay * dt / 2)
         planets_ax.append(ax_array)
         planets_ay.append(ay_array)
-
     calculate_a(planets)
     planets_ax = np.transpose(planets_ax)
     planets_ay = np.transpose(planets_ay)
     return planets_ax, planets_ay
 
 
+def calculate_energy_and_mass(planets):
+    e = 0.0
+    m = m_x = m_y = 0
+    """Вычисление общей энергии системы и координат центра масс"""
+    for first_planet in planets:
+        m += first_planet.m
+        m_x += first_planet.m * first_planet.x
+        m_y += first_planet.m * first_planet.y
+        for second_planet in planets:
+            if first_planet == second_planet:
+                continue
+            dx = second_planet.x - first_planet.x
+            dy = second_planet.y - first_planet.y
+            r_2 = 1.0 / ((dx * dx + dy * dy) ** 0.5)
+            e += first_planet.m * second_planet.m * r_2
+    e = - e * gravity / 2
+    m_vx = m_x / m
+    m_vy = m_y / m
+    return e, m_vx, m_vy
+
+
 def calculate_by_euler(planets: [Planet],
                        dt: int,
                        d: int):
     """ Пересчет координат каждой планеты по методу Эйлера"""
+    energy = []
+    mass_vx = []
+    mass_vy = []
+    e, m_vx, m_vy = calculate_energy_and_mass(planets)
+    energy.append(e)
+    mass_vx.append(m_vx)
+    mass_vy.append(m_vy)
     for t in range(0, d, dt):
         calculate_a(planets)
         for planet in planets:
@@ -98,12 +120,24 @@ def calculate_by_euler(planets: [Planet],
             planet.x_array.append(planet.x)
             planet.vx += planet.ax * dt
             planet.vy += planet.ay * dt
+        e, m_vx, m_vy = calculate_energy_and_mass(planets)
+        energy.append(e)
+        mass_vx.append(m_vx)
+        mass_vy.append(m_vy)
+    return energy, mass_vx, mass_vy
 
 
 def calculate_by_runge(planets: [Planet],
                        dt: int,
                        d: int):
     """ Пересчет координат каждой планеты по методу Рунге_Кутты"""
+    energy = []
+    mass_vx = []
+    mass_vy = []
+    e, m_vx, m_vy = calculate_energy_and_mass(planets)
+    energy.append(e)
+    mass_vx.append(m_vx)
+    mass_vy.append(m_vy)
     for t in range(0, d, dt):
         planets_ax, planets_ay = calculate_a_to_runge(planets, dt)
         for planet, ax, ay in zip(planets, planets_ax, planets_ay):
@@ -113,24 +147,42 @@ def calculate_by_runge(planets: [Planet],
             planet.x_array.append(planet.x)
             planet.vx += (ax[0] + 2 * ax[1] + 2 * ax[2] + ax[3]) * dt / 6
             planet.vy += (ay[0] + 2 * ay[1] + 2 * ay[2] + ay[3]) * dt / 6
+        e, m_vx, m_vy = calculate_energy_and_mass(planets)
+        energy.append(e)
+        mass_vx.append(m_vx)
+        mass_vy.append(m_vy)
+    return energy, mass_vx, mass_vy
 
 
-if __name__ == '__main__':
-    x_array = [0.0, 149500000000.0, 299000000000.0]
-    # x_array = [0.0, 149500000000.0]
-    y_array = [0.0, 0.0, 0.0]
-    # y_array = [0.0, 0.0]
-    vx_array = [0.0, 0.0, 0.0]
-    # vx_array = [0.0, 0.0]
-    vy_array = [0.0, 23297.87, 16474.08]
-    # vy_array = [0.0, 23297.87]
-    mass_array = [1.2166E30, 6.083E24, 1.2166E25]
-    # mass_array = [1.2166E30, 6.083E24]
+def calculate(n: int,
+              dt: int,
+              d: int,
+              schema: str,
+              x_array: [float],
+              y_array: [float],
+              vx_array: [float],
+              vy_array: [float],
+              mass_array: [float]):
+    # print(n, dt, d, schema, x_array, y_array, vx_array, vy_array, mass_array)
 
-    planets = init(3, x_array, y_array, vx_array, vy_array, mass_array)
-    # calculate_by_euler(planets, 3600, 31536000)
-    calculate_by_runge(planets, 3600, 31536000)
-    plt.plot(planets[0].x_array, planets[0].y_array)
-    plt.plot(planets[1].x_array, planets[1].y_array)
-    plt.plot(planets[2].x_array, planets[2].y_array)
-    plt.show()
+    planets_list = init(n, x_array, y_array, vx_array, vy_array, mass_array)
+    if schema == 'Euler':
+        energy, mass_vx, mass_vy = calculate_by_euler(planets_list, dt, d)
+    else:
+        energy, mass_vx, mass_vy = calculate_by_runge(planets_list, dt, d)
+
+    graphs = []
+    for planet in planets_list:
+        graphs.append({
+            'x': planet.x_array,
+            'y': planet.y_array
+        })
+
+    return {
+        'customData': {
+            'energy': energy,
+            'mass_vx': mass_vx,
+            'mass_vy': mass_vy,
+        },
+        'graphs': graphs
+    }
