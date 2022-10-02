@@ -41,6 +41,14 @@ INNER_HTML = `
             </div>
     `;
 
+function getRandomPlanetName(x, y) {
+    console.log("getRandomPlanetName", x, y);
+    if (x < 0.01 && y < 0.01) {
+        return "SUN";
+    }
+    let planets = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+    return planets[Math.floor(Math.random() * planets.length)];
+}
 
 function onValueChanged() {
     const number = parseInt(document.querySelector('#n').value);
@@ -87,6 +95,11 @@ function onValueChanged() {
             document.querySelectorAll('.vy')[i].value = vy_value === '0' ? values_vy[i] : vy_value;
             const mass_value = document.querySelectorAll('.mass')[i].value;
             document.querySelectorAll('.mass')[i].value = mass_value === '0' ? values_mass[i] : mass_value;
+
+            const y_value = document.querySelectorAll('.__y')[i].value;
+            const names_value = document.querySelectorAll('.name')[i].value;
+            document.querySelectorAll('.name')[i].value = names_value === 'OAOAOA' ? getRandomPlanetName(values_x[i], y_value) : names_value;
+
         }
     } else {
         for (let i = number; i < number_old; i++) {

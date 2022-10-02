@@ -25,7 +25,7 @@ def init(n: int, x_array: [float], y_array: [float], vx_array: [float], vy_array
     return list_planets
 
 
-def calculate_a(planets: [Planet], delta_x: [float] = None, delta_y: [float] = None):
+def calculate_a(planets: [Planet], delta_x: [float] = [], delta_y: [float] = []):
     """Вычисление ускорения каждой планеты"""
     for planet in planets:
         planet.ax = 0.0
@@ -177,6 +177,8 @@ def calculate(n: int,
             'x': planet.x_array,
             'y': planet.y_array
         })
+
+    print("Calculated", graphs)
 
     return {
         'customData': {

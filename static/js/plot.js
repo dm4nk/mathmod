@@ -57,6 +57,7 @@ function buildPlots(data) {
             config: {showSendToCloud: true},
             frames: getFrames(data),
         });
+        console.log("Got plot1");
     }
 
 
@@ -65,6 +66,7 @@ function buildPlots(data) {
         data: getFullTraces(data),
         config: {showSendToCloud: true},
     });
+    console.log("Got plot2");
 }
 
 function getLayout(data) {
@@ -124,13 +126,13 @@ function getLayout(data) {
 
 function getStartTraces(data) {
     let traces = [];
+    const names_array = Array.from(document.querySelectorAll('.name'));
 
     for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
-            //name: continents[i],
+            name: names_array[i]?.value,
             x: [data.graphs[i].x[0]],
             y: [data.graphs[i].y[0]],
-            //text: data.text.slice(),
             mode: 'markers',
             marker: {
                 //size: data.marker.size.slice(),
@@ -147,13 +149,13 @@ function getStartTraces(data) {
 
 function getFullTraces(data) {
     let traces = [];
+    const names_array = Array.from(document.querySelectorAll('.name'));
 
     for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
-            //name: continents[i],
+            name: names_array[i]?.value,
             x: data.graphs[i].x,
             y: data.graphs[i].y,
-            //text: data.text.slice(),
         });
     }
 
@@ -166,10 +168,10 @@ function getSteps(data) {
     const s = parseInt(document.querySelector('#s').value);
 
     for (let i = 0; i < data.graphs[0].x.length; i++) {
-        let label = "Energy: " + data.customData.energy[i] + "\n" +
+        let label = "Energy: " + data.customData.energy[i].toExponential(4) + "\n" +
             "Current time: " + s * i + "\n" +
-            "Mass vx: " + data.customData.mass_vx[i] + "\n" +
-            "Mass vy: " + data.customData.mass_vy[i];
+            "Mass vx: " + data.customData.mass_vx[i].toFixed(2) + "\n" +
+            "Mass vy: " + data.customData.mass_vy[i].toFixed(2);
 
         steps.push({
             label: label,
@@ -188,16 +190,16 @@ function getSteps(data) {
 
 function getFrames(data) {
     let frames = [];
+    const names_array = Array.from(document.querySelectorAll('.name'));
 
-    for (let i = 0; i < data.graphs[0].x.length; i++) {
+    for (let i = 0; i < data.graphs[0].x.length; ++i) {
         frames.push({
             name: i,
             data: data.graphs.map(planet => {
                 return {
+                    name: names_array[i]?.value,
                     x: [planet.x[i]],
-                    y: [planet.y[i]]
-                    // x: planet.x.slice(0, i),
-                    // y: planet.y.slice(0, i)
+                    y: [planet.y[i]],
                 }
             })
         });

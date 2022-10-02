@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from logic import calculate
+from model import calculate
 
 app = Flask(__name__)
 
