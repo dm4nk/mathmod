@@ -69,11 +69,17 @@ def calculate_a_to_runge(planets: [Planet], dt: int):
         for planet in planets:
             ax_array.append(planet.ax)
             ay_array.append(planet.ay)
-            delta_x.append(planet.ax * dt / 2)
-            delta_y.append(planet.ay * dt / 2)
+
+            if step == 3:
+                delta_x.append(planet.ax * dt)
+                delta_y.append(planet.ay * dt)
+            else:
+                delta_x.append(planet.ax * dt / 2)
+                delta_y.append(planet.ay * dt / 2)
+
         planets_ax.append(ax_array)
         planets_ay.append(ay_array)
-    calculate_a(planets)
+    # calculate_a(planets)
     planets_ax = np.transpose(planets_ax)
     planets_ay = np.transpose(planets_ay)
     return planets_ax, planets_ay

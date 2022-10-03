@@ -195,9 +195,9 @@ function getFrames(data) {
     for (let i = 0; i < data.graphs[0].x.length; ++i) {
         frames.push({
             name: i,
-            data: data.graphs.map(planet => {
+            data: data.graphs.map((planet, index) => {
                 return {
-                    name: names_array[i]?.value,
+                    name: names_array[index]?.value,
                     x: [planet.x[i]],
                     y: [planet.y[i]],
                 }
