@@ -49,7 +49,7 @@ body {
 .main-container {
   margin: 1.5rem;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
 
   .container {
     background-color: var(--color-white);
@@ -264,4 +264,9 @@ table {
 .footer {
   text-align: center;
   margin-bottom: 2rem;
+}
+
+.right-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
