@@ -75,9 +75,9 @@ function buildTable(number) {
         innerHtmlString += `<th>${row}</th>`
 
         let quantity = 100 * (row + 1);
-        let alpha = 0.01;
+        let alpha = -0.01;
         if (row === 0)
-            alpha = 0.01 * (-1) ** row;
+            alpha = 0.01;
 
         innerHtmlString += `<td>
                 <div class="input-control">
