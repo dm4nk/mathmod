@@ -71,7 +71,6 @@ function buildPlots(data) {
     if (!togglePlot) {
         Promise.all([getStartTraces(data), getLayout(data), getFrames(data)])
             .then(([startTraces, layout, frames]) => {
-                console.log('AAAAAAAAAA')
                 Plotly.newPlot('plot1', {
                     data: startTraces,
                     layout: layout,
@@ -87,7 +86,6 @@ function buildPlots(data) {
             data: res,
             config: {showSendToCloud: true},
         });
-        console.log("Got plot2");
     })
 }
 
