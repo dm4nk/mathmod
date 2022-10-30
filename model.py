@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 def method_runge_kutta(n, h, alpha, b, count):
     k1 = function(n, alpha, b, count)
     k2 = function(n + 0.5 * h * k1, alpha, b, count)
@@ -21,11 +20,12 @@ def function(n, alpha, b, count):
 
 
 def calculate(number_of_populations: int,
-              step: int,
+              step: float,
               duration: int,
               N: [float],
               alpha: [float],
               B: [[float]]):
+    print(number_of_populations, step, duration, N, alpha, B)
 
     time_points = np.arange(0, duration, step)
     n_points = []
@@ -47,7 +47,7 @@ def calculate(number_of_populations: int,
     graphs = []
     for i in range(0, number_of_populations):
         graphs.append({
-            'x': time_points,
+            'x': time_points.tolist(),
             'y': n_points[i],
         })
 
@@ -55,7 +55,7 @@ def calculate(number_of_populations: int,
 
     return {
         'customData': {
-            'summary_count': summary_count,
+            'summary_count': summary_count.tolist(),
         },
         'graphs': graphs
     }

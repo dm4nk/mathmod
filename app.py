@@ -16,7 +16,14 @@ def draw_plots():
     request_data = request.get_json()
     print(request_data)
 
-    return {'cringe': 'data'}
+    return calculate(
+        number_of_populations=int(request_data['number_of_populations']),
+        step=float(request_data['step']),
+        duration=int(request_data['duration']),
+        N=[float(num) for num in request_data['N']],
+        alpha=[float(num) for num in request_data['alpha']],
+        B=request_data['B'],
+    )
 
 
 if __name__ == '__main__':

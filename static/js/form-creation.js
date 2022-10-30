@@ -25,9 +25,9 @@ function buildMatrix(number) {
             if (col === row)
                 value = 0;
             else if (row < col)
-                value = 0.001;
+                value = -0.0001;
             else
-                value = -0.001;
+                value = 0.0001;
 
             innerHtmlString += `<td>
                 <div class="input-control">

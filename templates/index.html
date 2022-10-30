@@ -42,15 +42,22 @@
                 </div>
                 <div class="input-control">
                     <label for="s">Step</label>
-                    <input type="number" value="36000" step="1" id="s" name="s" required
+                    <input type="number" value="0.1" step="0.000001" id="s" name="s" required
                            onkeypress="return charCode!==45">
                     <h6>in seconds</h6>
                 </div>
                 <div class="input-control">
                     <label for="d">Duration</label>
-                    <input type="number" value="31536000" step="1" id="d" name="d" required
+                    <input type="number" value="1000" step="0.000001" id="d" name="d" required
                            onkeypress="return charCode!==45">
                     <h6>in seconds</h6>
+                </div>
+                <p>Disable first plot</p>
+                <div class="switch-buttons">
+                    <label class="switch">
+                        <input id="switch-plot" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
                 </div>
                 <div class="input-control">
                     <input class="submit-btn gradient-background" type="submit" value="Submit">
@@ -76,6 +83,7 @@
         bubbles: true,
         cancelable: true
     });
+    switchBtn.dispatchEvent(event);
     submitBtn.dispatchEvent(event);
 </script>
 </body>

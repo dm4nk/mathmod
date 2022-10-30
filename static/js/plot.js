@@ -1,4 +1,5 @@
 const submitBtn = document.querySelector('.submit-btn');
+const switchBtn = document.getElementById('switch-plot');
 
 function getIntById(id) {
     return parseInt(document.getElementById(id)?.value);
@@ -8,9 +9,9 @@ function getFloatById(id) {
     return parseFloat(document.getElementById(id)?.value);
 }
 
-submitBtn.addEventListener('click', function (event) {
-    const n = getIntById('n');
-    const s = getIntById('s');
+submitBtn.addEventListener('click', async function (event) {
+    const n = getFloatById('n');
+    const s = getFloatById('s');
     const d = getIntById('d');
 
     let N = [];
@@ -18,7 +19,7 @@ submitBtn.addEventListener('click', function (event) {
     let B = [];
 
     for (let row = 0; row < n; ++row) {
-        N.push(getIntById('input_quantity' + row));
+        N.push(getFloatById('input_quantity' + row));
         alpha.push(getFloatById('input_alpha' + row));
     }
 
@@ -64,25 +65,33 @@ submitBtn.addEventListener('click', function (event) {
 
 
 function buildPlots(data) {
-    Plotly.purge('plot1');
-    // Plotly.plot('plot1', {
-    //     data: getStartTraces(data),
-    //     layout: getLayout(data),
-    //     config: {showSendToCloud: true},
-    //     frames: getFrames(data),
-    // });
-    // console.log("Got plot1");
+    const togglePlot = document.querySelector('#switch-plot').checked;
 
+    Plotly.purge('plot1');
+    if (!togglePlot) {
+        Promise.all([getStartTraces(data), getLayout(data), getFrames(data)])
+            .then(([startTraces, layout, frames]) => {
+                console.log('AAAAAAAAAA')
+                Plotly.newPlot('plot1', {
+                    data: startTraces,
+                    layout: layout,
+                    config: {showSendToCloud: true},
+                    frames: frames,
+                });
+            })
+    }
 
     Plotly.purge('plot2');
-    Plotly.plot('plot2', {
-        data: getFullTraces(data),
-        config: {showSendToCloud: true},
-    });
-    console.log("Got plot2");
+    getFullTraces(data).then(res => {
+        Plotly.newPlot('plot2', {
+            data: res,
+            config: {showSendToCloud: true},
+        });
+        console.log("Got plot2");
+    })
 }
 
-function getLayout(data) {
+async function getLayout(data) {
     return {
         xaxis: {},
         yaxis: {},
@@ -108,8 +117,8 @@ function getLayout(data) {
                 args: [null, {
                     mode: 'immediate',
                     fromcurrent: true,
-                    transition: {duration: 300},
-                    frame: {duration: 500, redraw: false}
+                    transition: {duration: 1},
+                    frame: {duration: 1, redraw: false}
                 }],
                 label: 'Play'
             }, {
@@ -132,27 +141,25 @@ function getLayout(data) {
                 xanchor: 'right',
                 font: {size: 20, color: '#666'}
             },
-            steps: getSteps(data)
+            steps: await getSteps(data)
         }]
     }
 }
 
-function getStartTraces(data) {
+async function getStartTraces(data) {
     let traces = [];
-    const names_array = Array.from(document.querySelectorAll('.name'));
 
     for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
-            name: names_array[i]?.value,
             x: [data.graphs[i].x[0]],
             y: [data.graphs[i].y[0]],
-            mode: 'markers',
-            marker: {
-                //size: data.marker.size.slice(),
-                size: 15,
-                sizemode: 'area',
-                sizeref: 200000
-            }
+            // mode: 'markers',
+            // marker: {
+            //     //size: data.marker.size.slice(),
+            //     size: 15,
+            //     sizemode: 'area',
+            //     sizeref: 200000
+            // }
         });
     }
 
@@ -160,7 +167,7 @@ function getStartTraces(data) {
     return traces;
 }
 
-function getFullTraces(data) {
+async function getFullTraces(data) {
     let traces = [];
 
     for (let i = 0; i < data.graphs.length; i++) {
@@ -174,23 +181,21 @@ function getFullTraces(data) {
     return traces;
 }
 
-function getSteps(data) {
+async function getSteps(data) {
     let steps = [];
-    const s = parseInt(document.querySelector('#s').value);
+    const s = getFloatById('s');
 
     for (let i = 0; i < data.graphs[0].x.length; i++) {
-        let label = "Energy: " + data.customData.energy[i].toExponential(4) + "\n" +
-            "Current time: " + s * i + "\n" +
-            "Mass vx: " + data.customData.mass_vx[i].toFixed(2) + "\n" +
-            "Mass vy: " + data.customData.mass_vy[i].toFixed(2);
+        let label = "Summary: " + data.customData.summary_count[i].toFixed(2) + "\n" +
+            "Current time: " + (s * i).toFixed(1);
 
         steps.push({
             label: label,
             method: 'animate',
             args: [[i], {
                 mode: 'immediate',
-                frame: {redraw: false, duration: 300},
-                transition: {duration: 300},
+                frame: {redraw: false, duration: 1},
+                transition: {duration: 1},
             }]
         });
     }
@@ -199,18 +204,18 @@ function getSteps(data) {
     return steps;
 }
 
-function getFrames(data) {
+async function getFrames(data) {
     let frames = [];
-    const names_array = Array.from(document.querySelectorAll('.name'));
 
     for (let i = 0; i < data.graphs[0].x.length; ++i) {
         frames.push({
             name: i,
             data: data.graphs.map(planet => {
                 return {
-                    name: names_array[i]?.value,
-                    x: [planet.x[i]],
-                    y: [planet.y[i]],
+                    // x: [planet.x[i]],
+                    // y: [planet.y[i]],
+                    x: planet.x.slice(0, i),
+                    y: planet.y.slice(0, i),
                 }
             })
         });
