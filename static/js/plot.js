@@ -32,9 +32,9 @@ submitBtn.addEventListener('click', function (event) {
 
 
     const data = {
-        n: n,
-        s: s,
-        d: d,
+        number_of_populations: n,
+        step: s,
+        duration: d,
         N: N,
         alpha: alpha,
         B: B,
