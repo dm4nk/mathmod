@@ -21,12 +21,20 @@ function buildMatrix(number) {
         innerHtmlString += `<tr>`;
         innerHtmlString += `<th>${row}</th>`
         for (let col = 0; col < number; col++) {
+            let value;
+            if (col === row)
+                value = 0;
+            else if (row < col)
+                value = 0.001;
+            else
+                value = -0.001;
+
             innerHtmlString += `<td>
                 <div class="input-control">
                    <input 
                    id="input_matrix${row}${col}" 
                    type="number" 
-                   value="0" 
+                   value="${value}" 
                    step="0.000001" 
                    required 
                    style="text-align: center; min-width: 100px">
@@ -67,9 +75,9 @@ function buildTable(number) {
         innerHtmlString += `<th>${row}</th>`
 
         let quantity = 100 * (row + 1);
-        let alpha = 0.01;
+        let alpha = -0.01;
         if (row === 0)
-            alpha = 0.01 * (-1) ** row;
+            alpha = 0.01;
 
         innerHtmlString += `<td>
                 <div class="input-control">
