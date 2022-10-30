@@ -1,53 +1,105 @@
-G = 6.6743 * 10 ** -11;
+function buildMatrix(number) {
+    let innerHtmlString = ``;
+    // introduce div
+    innerHtmlString += `<div class="parameters">`;
 
+    //introduce table
+    innerHtmlString += `<table>`;
 
-INNER_HTML = `
-    <div class="parameters">
-                <div class="input-control">
-                    <label>Name
-                        <input class="name" type="text" value="OAOAOA" step="1" required>
-                    </label>
-                </div>
-
-                <div class="input-control">
-                    <label>X
-                        <input class="__x" type="number" value="0" step="0.000001" required onkeypress="return charCode!==45">
-                    </label>
-                </div>
-
-                <div class="input-control">
-                    <label>Y
-                        <input class="__y" type="number" value="0" step="0.000001" required onkeypress="return charCode!==45">
-                    </label>
-                </div>
-
-                <div class="input-control">
-                    <label>Vx
-                        <input class="vx" type="number" value="0" step="0.000001" required onkeypress="return charCode!==45">
-                    </label>
-                </div>
-
-                <div class="input-control">
-                    <label>Vy
-                        <input class="vy" type="number" value="0" step="0.000001" required onkeypress="return charCode!==45">
-                    </label>
-                </div>
-
-                <div class="input-control">
-                    <label>Mass
-                        <input class="mass" type="text" value="0" required onkeypress="return charCode!==45">
-                    </label>
-                </div>
-            </div>
-    `;
-
-function getRandomPlanetName(x, y) {
-    console.log("getRandomPlanetName", x, y);
-    if (x < 0.01 && y < 0.01) {
-        return "SUN";
+    // make table header
+    innerHtmlString += `<tr>`;
+    innerHtmlString += `<th></th>`;
+    for (let row = 0; row < number; row++) {
+        innerHtmlString += `<th>${row}</th>`
     }
-    let planets = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
-    return planets[Math.floor(Math.random() * planets.length)];
+    innerHtmlString += `<tr>`;
+
+    // introduce table body
+    innerHtmlString += `<tbody>`;
+
+    for (let row = 0; row < number; row++) {
+        innerHtmlString += `<tr>`;
+        innerHtmlString += `<th>${row}</th>`
+        for (let col = 0; col < number; col++) {
+            innerHtmlString += `<td>
+                <div class="input-control">
+                   <input 
+                   id="input_matrix${row}${col}" 
+                   type="number" 
+                   value="0" 
+                   step="0.000001" 
+                   required 
+                   style="text-align: center; min-width: 100px">
+                </div>
+            </td>`
+        }
+        innerHtmlString += `</tr>`;
+    }
+
+    innerHtmlString += `</tbody>`;
+    innerHtmlString += `</table>`;
+    innerHtmlString += `</div>`;
+
+    return innerHtmlString;
+}
+
+function buildTable(number) {
+    let innerHtmlString = ``;
+
+    // introduce div
+    innerHtmlString += `<div class="parameters">`;
+
+    //introduce table
+    innerHtmlString += `<table>`;
+
+    //introducing header
+    innerHtmlString += `<tr>`;
+    innerHtmlString += `<th>${number}</th>`;
+    innerHtmlString += `<th>QUANTITY</th>`;
+    innerHtmlString += `<th>ALPHA</th>`;
+    innerHtmlString += `<tr>`;
+
+    // introduce table body
+    innerHtmlString += `<tbody>`;
+
+    for (let row = 0; row < number; row++) {
+        innerHtmlString += `<tr>`;
+        innerHtmlString += `<th>${row}</th>`
+
+        let quantity = 100 * (row + 1);
+        let alpha = 0.01 * (-1) ** row;
+
+        innerHtmlString += `<td>
+                <div class="input-control">
+                   <input 
+                   id="input_quantity${row}" 
+                   type="number" 
+                   value="${quantity}" 
+                   step="0.000001" 
+                   required 
+                   onkeypress="return charCode!==45"
+                   style="text-align: center">
+                </div>
+        </td>`
+        innerHtmlString += `<td>
+                  <div class="input-control">
+                   <input 
+                   id="input_alpha${row}" 
+                   type="number" 
+                   value="${alpha}" 
+                   step="0.000001" 
+                   required 
+                   style="text-align: center">
+                </div>
+        </td>`
+        innerHtmlString += `<tr>`;
+    }
+
+    innerHtmlString += `</tbody>`;
+    innerHtmlString += `</table>`;
+    innerHtmlString += `</div>`;
+
+    return innerHtmlString;
 }
 
 function onValueChanged() {
@@ -56,54 +108,6 @@ function onValueChanged() {
         alert("too much...");
         return;
     }
-    const number_old = document.querySelectorAll('.__x').length;
-    const form = document.getElementById('planet-container');
 
-    if (number > number_old) {
-        for (let i = number_old; i < number; i++) {
-            const element = document.createElement('div');
-            element.innerHTML = INNER_HTML;
-            form.appendChild(element);
-        }
-
-        const sun_x = 0;
-        const sun_vy = 0;
-        const sun_mass = 1.2166e30;
-
-        const init_x = 149_500_000_000;
-        const init_vy = 23297;
-        const init_mass = 6.083e24;
-
-        const values_x = [sun_x];
-        const values_vy = [sun_vy];
-        const values_mass = [sun_mass];
-
-        for (let i = 0; i < number - 1; i++) {
-            const x = (init_x * 2 ** i).toFixed(6);
-            const vy = Math.sqrt(G * sun_mass / x).toFixed(6);
-            const mass = (init_mass * 2 ** i).toFixed(6);
-
-            values_x.push(x);
-            values_vy.push(vy);
-            values_mass.push(mass);
-        }
-
-        for (let i = number_old; i < number; i++) {
-            const x_value = document.querySelectorAll('.__x')[i].value;
-            document.querySelectorAll('.__x')[i].value = x_value === '0' ? values_x[i] : x_value;
-            const vy_value = document.querySelectorAll('.vy')[i].value;
-            document.querySelectorAll('.vy')[i].value = vy_value === '0' ? values_vy[i] : vy_value;
-            const mass_value = document.querySelectorAll('.mass')[i].value;
-            document.querySelectorAll('.mass')[i].value = mass_value === '0' ? values_mass[i] : mass_value;
-
-            const y_value = document.querySelectorAll('.__y')[i].value;
-            const names_value = document.querySelectorAll('.name')[i].value;
-            document.querySelectorAll('.name')[i].value = names_value === 'OAOAOA' ? getRandomPlanetName(values_x[i], y_value) : names_value;
-
-        }
-    } else {
-        for (let i = number; i < number_old; i++) {
-            document.getElementsByClassName('parameters')[number].remove();
-        }
-    }
+    document.getElementById('planet-container').innerHTML = buildMatrix(number) + buildTable(number);
 }

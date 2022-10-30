@@ -19,7 +19,7 @@
 </div>
 
 <div class="description">
-    <h5>solar system simulator</h5>
+    <h5>population simulator</h5>
 </div>
 
 <div class="main-container">
@@ -32,11 +32,11 @@
         </div>
     </div>
     <div class="right-container">
-        <div class="container">
+        <div class="container from-container">
             <form class="form" action="" id="form">
                 <p>General Parameters</p>
                 <div class="input-control">
-                    <label for="n">Number of planets</label>
+                    <label for="n">Number of Populations</label>
                     <input type="number" value="2" step="1" id="n" name="n" required
                            onchange="onValueChanged()">
                 </div>
@@ -52,34 +52,13 @@
                            onkeypress="return charCode!==45">
                     <h6>in seconds</h6>
                 </div>
-
-                <p>Scheme</p>
-                <div class="radio-buttons">
-                    <div class="form_radio_btn">
-                        <input id="radio-1" type="radio" name="radio" value="Euler" checked>
-                        <label for="radio-1">Euler</label>
-                    </div>
-                    <div class="form_radio_btn">
-                        <input id="radio-2" type="radio" name="radio" value="Runge–Kutta">
-                        <label for="radio-2">Runge–Kutta</label>
-                    </div>
-                </div>
-
-                <p>Disable first plot</p>
-                <div class="switch-buttons">
-                    <label class="switch">
-                        <input id="switch-plot" type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-
                 <div class="input-control">
                     <input class="submit-btn gradient-background" type="submit" value="Submit">
                 </div>
             </form>
         </div>
         <div class="container" id="planet-container">
-            <p>Planet Parameters</p>
+            <p>Population Parameters</p>
         </div>
 
     </div>

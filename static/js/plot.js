@@ -1,26 +1,43 @@
 const submitBtn = document.querySelector('.submit-btn');
-submitBtn.addEventListener('click', function (event) {
-    const n = parseInt(document.querySelector('#n').value);
-    const s = parseInt(document.querySelector('#s').value);
-    const d = parseInt(document.querySelector('#d').value);
-    const schema = document.querySelector('input[name="radio"]:checked').value;
 
-    const x_array = Array.from(document.querySelectorAll('.__x')).map(input => parseFloat(input.value));
-    const y_array = Array.from(document.querySelectorAll('.__y')).map(input => parseFloat(input.value));
-    const vx_array = Array.from(document.querySelectorAll('.vx')).map(input => parseFloat(input.value));
-    const vy_array = Array.from(document.querySelectorAll('.vy')).map(input => parseFloat(input.value));
-    const mass_array = Array.from(document.querySelectorAll('.mass')).map(input => parseFloat(input.value));
+function getIntById(id) {
+    return parseInt(document.getElementById(id)?.value);
+}
+
+function getFloatById(id) {
+    return parseFloat(document.getElementById(id)?.value);
+}
+
+submitBtn.addEventListener('click', function (event) {
+    const n = getIntById('n');
+    const s = getIntById('s');
+    const d = getIntById('d');
+
+    let N = [];
+    let alpha = [];
+    let B = [];
+
+    for (let row = 0; row < n; ++row) {
+        N.push(getIntById('input_quantity' + row));
+        alpha.push(getFloatById('input_alpha' + row));
+    }
+
+    for (let row = 0; row < n; ++row) {
+        let B_row = []
+        for (let col = 0; col < n; ++col) {
+            B_row.push(getFloatById('input_matrix' + row + col));
+        }
+        B.push(B_row)
+    }
+
 
     const data = {
         n: n,
         s: s,
         d: d,
-        schema: schema,
-        x_array: x_array,
-        y_array: y_array,
-        vx_array: vx_array,
-        vy_array: vy_array,
-        mass_array: mass_array,
+        N: N,
+        alpha: alpha,
+        B: B,
     };
 
     console.log("data", data);
@@ -39,7 +56,7 @@ submitBtn.addEventListener('click', function (event) {
         },
         error: function (result, status) {
             console.log(result);
-            alert("Unexpected Error. Ty again");
+            alert("Unexpected Error. Try again");
         },
         dataType: "json"
     });
@@ -47,18 +64,14 @@ submitBtn.addEventListener('click', function (event) {
 
 
 function buildPlots(data) {
-    const togglePlot = document.querySelector('#switch-plot').checked;
-
     Plotly.purge('plot1');
-    if (!togglePlot) {
-        Plotly.plot('plot1', {
-            data: getStartTraces(data),
-            layout: getLayout(data),
-            config: {showSendToCloud: true},
-            frames: getFrames(data),
-        });
-        console.log("Got plot1");
-    }
+    // Plotly.plot('plot1', {
+    //     data: getStartTraces(data),
+    //     layout: getLayout(data),
+    //     config: {showSendToCloud: true},
+    //     frames: getFrames(data),
+    // });
+    // console.log("Got plot1");
 
 
     Plotly.purge('plot2');
@@ -149,11 +162,9 @@ function getStartTraces(data) {
 
 function getFullTraces(data) {
     let traces = [];
-    const names_array = Array.from(document.querySelectorAll('.name'));
 
     for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
-            name: names_array[i]?.value,
             x: data.graphs[i].x,
             y: data.graphs[i].y,
         });
