@@ -67,26 +67,30 @@ submitBtn.addEventListener('click', async function (event) {
 function buildPlots(data) {
     const togglePlot = document.querySelector('#switch-plot').checked;
 
-    Plotly.purge('plot1');
     if (!togglePlot) {
-        Promise.all([getStartTraces(data), getLayout(data), getFrames(data)])
-            .then(([startTraces, layout, frames]) => {
-                Plotly.newPlot('plot1', {
-                    data: startTraces,
-                    layout: layout,
-                    config: {showSendToCloud: true},
-                    frames: frames,
-                });
-            })
+        Promise.all([getStartTraces(data), getLayout(data), getFrames(data)]).then(buildFirstPlot);
     }
 
-    Plotly.purge('plot2');
-    getFullTraces(data).then(res => {
-        Plotly.newPlot('plot2', {
-            data: res,
-            config: {showSendToCloud: true},
-        });
-    })
+    getFullTraces(data).then(buildSecondPlot);
+}
+
+async function buildFirstPlot([startTraces, layout, frames]) {
+    console.log('started 1 plot');
+    Plotly.react('plot1', {
+        data: startTraces,
+        layout: layout,
+        config: {showSendToCloud: true},
+        frames: frames,
+    }).then(() =>  console.log('finished 1 plot'));
+
+}
+
+async function buildSecondPlot(res) {
+    console.log('started 2 plot');
+    Plotly.react('plot2', {
+        data: res,
+        config: {showSendToCloud: true},
+    }).then(() =>  console.log('finished 2 plot'));
 }
 
 async function getLayout(data) {
@@ -161,7 +165,7 @@ async function getStartTraces(data) {
         });
     }
 
-    console.log("traces", traces);
+    console.log("traces finished");
     return traces;
 }
 
@@ -174,8 +178,7 @@ async function getFullTraces(data) {
             y: data.graphs[i].y,
         });
     }
-
-    console.log("traces", traces);
+    console.log("full traces finished");
     return traces;
 }
 
@@ -198,7 +201,7 @@ async function getSteps(data) {
         });
     }
 
-    console.log("steps", steps);
+    console.log("steps finished");
     return steps;
 }
 
@@ -219,6 +222,6 @@ async function getFrames(data) {
         });
     }
 
-    console.log("frames", frames);
+    console.log("frames finished");
     return frames;
 }
