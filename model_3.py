@@ -117,6 +117,7 @@ def calculate(time: int, n: int, alpha: float, betta: float, c: int):
     efficiency = r / num
     busy_lines = get_amount_of_busy_line(m)
     workload = get_workload_of_lines(m)
+
     amount = math.ceil(time / 0.1)
     time_points = np.linspace(0, time, num=amount)
     for i in range(0, m.shape[0]):
