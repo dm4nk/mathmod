@@ -10,35 +10,18 @@ function getFloatById(id) {
 }
 
 submitBtn.addEventListener('click', async function (event) {
-    const n = getFloatById('n');
-    const s = getFloatById('s');
-    const d = getIntById('d');
-
-    let N = [];
-    let alpha = [];
-    let B = [];
-
-    for (let row = 0; row < n; ++row) {
-        N.push(getFloatById('input_quantity' + row));
-        alpha.push(getFloatById('input_alpha' + row));
-    }
-
-    for (let row = 0; row < n; ++row) {
-        let B_row = []
-        for (let col = 0; col < n; ++col) {
-            B_row.push(getFloatById('input_matrix' + row + col));
-        }
-        B.push(B_row)
-    }
-
+    const duration = getFloatById('duration');
+    const number_of_lines = getIntById('number-of-lines');
+    const power_for_duration = getFloatById('power-for-duration');
+    const power_for_time = getFloatById('power-for-time');
+    const collectors_capacity = getIntById('collectors-capacity');
 
     const data = {
-        number_of_populations: n,
-        step: s,
-        duration: d,
-        N: N,
-        alpha: alpha,
-        B: B,
+        'duration': duration,
+        'number_of_lines': number_of_lines,
+        'power_for_duration': power_for_duration,
+        'power_for_time': power_for_time,
+        'collectors_capacity': collectors_capacity,
     };
 
     console.log("data", data);
@@ -71,7 +54,7 @@ function buildPlots(data) {
         Promise.all([getStartTraces(data), getLayout(data), getFrames(data)]).then(buildFirstPlot);
     }
 
-    getFullTraces(data).then(buildSecondPlot);
+    // getFullTraces(data).then(buildSecondPlot);
 }
 
 async function buildFirstPlot([startTraces, layout, frames]) {
@@ -81,7 +64,7 @@ async function buildFirstPlot([startTraces, layout, frames]) {
         layout: layout,
         config: {showSendToCloud: true},
         frames: frames,
-    }).then(() =>  console.log('finished 1 plot'));
+    }).then(() => console.log('finished 1 plot'));
 
 }
 
@@ -90,7 +73,7 @@ async function buildSecondPlot(res) {
     Plotly.react('plot2', {
         data: res,
         config: {showSendToCloud: true},
-    }).then(() =>  console.log('finished 2 plot'));
+    }).then(() => console.log('finished 2 plot'));
 }
 
 async function getLayout(data) {
@@ -155,13 +138,12 @@ async function getStartTraces(data) {
         traces.push({
             x: [data.graphs[i].x[0]],
             y: [data.graphs[i].y[0]],
-            // mode: 'markers',
-            // marker: {
-            //     //size: data.marker.size.slice(),
-            //     size: 15,
-            //     sizemode: 'area',
-            //     sizeref: 200000
-            // }
+            mode: 'markers',
+            marker: {
+                size: 15,
+                sizemode: 'area',
+                sizeref: 200000
+            }
         });
     }
 
@@ -213,10 +195,14 @@ async function getFrames(data) {
             name: i,
             data: data.graphs.map(planet => {
                 return {
-                    // x: [planet.x[i]],
-                    // y: [planet.y[i]],
                     x: planet.x.slice(0, i),
                     y: planet.y.slice(0, i),
+                    mode: 'markers',
+                    marker: {
+                        size: 15,
+                        sizemode: 'area',
+                        sizeref: 200000
+                    }
                 }
             })
         });

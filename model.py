@@ -63,7 +63,7 @@ def distribution(time: int, n: int, t_array: [float], d_array: [float], c: int):
                     matrix[0][j] += 1
             else:
                 idx = []  # все индексы события
-                for j in range(start_index, end_index+1):
+                for j in range(start_index, end_index + 1):
                     idx.append(j)
                 flag = False
                 for line in range(0, n):  # сначала находим полностью свободную линию
@@ -84,7 +84,7 @@ def distribution(time: int, n: int, t_array: [float], d_array: [float], c: int):
         return matrix, rejection
 
 
-def calculate(time: int, n: int, alpha: float, betta: float, c: int):
+def calculate(time: float, n: int, alpha: float, betta: float, c: int):
     """
     Функция, рассчитывающая все необходимые значения
     :param time: время моделирования
@@ -105,7 +105,7 @@ def calculate(time: int, n: int, alpha: float, betta: float, c: int):
     t_array, d_array = [], []
 
     while True:
-        z = random.expovariate(alpha)/3
+        z = random.expovariate(alpha) / 3
         t += z
         if t > time:
             break
@@ -120,11 +120,33 @@ def calculate(time: int, n: int, alpha: float, betta: float, c: int):
 
     amount = math.ceil(time / 0.1)
     time_points = np.linspace(0, time, num=amount)
+
+    graphs = []
     for i in range(0, m.shape[0]):
         m_masked = np.ma.masked_where(m[i] == 0, m[i])
-        plt.scatter(time_points, m_masked, marker='.')
-    plt.show()
+
+        x, y, = [], []
+        for _t, _m in zip(time_points, m_masked):
+            if _m:
+                x.append(_t)
+                y.append(_m * i)
+
+        graphs.append({
+            'x': x,
+            'y': y,
+        })
+
+    return {
+        'customData': {
+            'number_of_calls': num,
+            'cancelled_calls': r,
+            'efficiency': efficiency,
+            'busy_lines': busy_lines,
+            'summary_count': workload,
+        },
+        'graphs': graphs
+    }
 
 
 if __name__ == '__main__':
-    calculate(100, 2, 0.1, 0.1, 2)
+    calculate(100, 3, 0.1, 0.1, 2)

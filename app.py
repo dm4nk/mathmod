@@ -17,12 +17,11 @@ def draw_plots():
     print(request_data)
 
     return calculate(
-        number_of_populations=int(request_data['number_of_populations']),
-        step=float(request_data['step']),
-        duration=int(request_data['duration']),
-        N=[float(num) for num in request_data['N']],
-        alpha=[float(num) for num in request_data['alpha']],
-        B=request_data['B'],
+        time=float(request_data['duration']),
+        n=int(request_data['number_of_lines']),
+        betta=float(request_data['power_for_duration']),
+        alpha=float(request_data['power_for_time']),
+        c=int(request_data['collectors_capacity']),
     )
 
 

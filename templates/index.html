@@ -34,23 +34,31 @@
     <div class="right-container">
         <div class="container from-container">
             <form class="form" action="" id="form">
-                <p>General Parameters</p>
+                <p>Input Parameters</p>
                 <div class="input-control">
-                    <label for="n">Number of Populations</label>
-                    <input type="number" value="2" step="1" id="n" name="n" required
-                           onchange="onValueChanged()">
+                    <label for="duration">Duration</label>
+                    <input type="number" value="100" step="0.0000000001" id="duration" required
+                           onkeypress="return charCode!==45">
                 </div>
                 <div class="input-control">
-                    <label for="s">Step</label>
-                    <input type="number" value="0.1" step="0.000001" id="s" name="s" required
+                    <label for="number-of-lines">Number of Lines</label>
+                    <input type="number" value="3" step="1" id="number-of-lines" required
                            onkeypress="return charCode!==45">
-                    <h6>in seconds</h6>
                 </div>
                 <div class="input-control">
-                    <label for="d">Duration</label>
-                    <input type="number" value="1000" step="0.000001" id="d" name="d" required
+                    <label for="power-for-duration">Power for Duration</label>
+                    <input type="number" value="0.1" step="0.0000000001" id="power-for-duration" required
                            onkeypress="return charCode!==45">
-                    <h6>in seconds</h6>
+                </div>
+                <div class="input-control">
+                    <label for="power-for-time">Power for Time</label>
+                    <input type="number" value="0.1" step="0.0000000001" id="power-for-time" required
+                           onkeypress="return charCode!==45">
+                </div>
+                <div class="input-control">
+                    <label for="collectors-capacity">Collector's capacity</label>
+                    <input type="number" value="1" step="1" id="collectors-capacity" required
+                           onkeypress="return charCode!==45">
                 </div>
                 <p>Disable first plot</p>
                 <div class="switch-buttons">
@@ -64,8 +72,27 @@
                 </div>
             </form>
         </div>
-        <div class="container" id="planet-container">
-            <p>Population Parameters</p>
+        <div class="container" id="output-container">
+            <div class="input-control">
+                <label for="busy-lines">Busy lines</label>
+                <input type="number" value="-1" step="1" id="busy-lines" disabled>
+            </div>
+            <div class="input-control">
+                <label for="capacitors-workload">Capacitor's workload</label>
+                <input type="number" value="-1" step="0.0000000001" id="capacitors-workload" disabled>
+            </div>
+            <div class="input-control">
+                <label for="number-of-calls">Number of calls</label>
+                <input type="number" value="-1" step="1" id="number-of-calls" disabled>
+            </div>
+            <div class="input-control">
+                <label for="cancelled-calls">Cancelled calls</label>
+                <input type="number" value="-1" step="1" id="cancelled-calls" disabled>
+            </div>
+            <div class="input-control">
+                <label for="efficiency">Efficiency</label>
+                <input type="number" value="-1" step="0.0000000001" id="efficiency" disabled>
+            </div>
         </div>
 
     </div>
@@ -77,7 +104,6 @@
 <script src="../static/js/form-creation.js"></script>
 
 <script>
-    onValueChanged();
     const event = new MouseEvent('click', {
         view: window,
         bubbles: true,
