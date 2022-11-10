@@ -1,5 +1,4 @@
 const submitBtn = document.querySelector('.submit-btn');
-const switchBtn = document.getElementById('switch-plot');
 
 function getIntById(id) {
     return parseInt(document.getElementById(id)?.value);
@@ -36,6 +35,7 @@ submitBtn.addEventListener('click', async function (event) {
         success: function (result) {
             console.log(result);
             buildPlots(result);
+            fillParameters(result);
             console.log("REFRESHED");
         },
         error: function (result, status) {
@@ -48,13 +48,14 @@ submitBtn.addEventListener('click', async function (event) {
 
 
 function buildPlots(data) {
-    const togglePlot = document.querySelector('#switch-plot').checked;
+    Promise.all([getStartTraces(data), getLayout(data), getFrames(data)]).then(buildFirstPlot);
+}
 
-    if (!togglePlot) {
-        Promise.all([getStartTraces(data), getLayout(data), getFrames(data)]).then(buildFirstPlot);
-    }
-
-    // getFullTraces(data).then(buildSecondPlot);
+function fillParameters(data) {
+    document.getElementById('busy-lines').value = data.customData.busy_lines;
+    document.getElementById('number-of-calls').value = data.customData.number_of_calls;
+    document.getElementById('cancelled-calls').value = data.customData.cancelled_calls;
+    document.getElementById('efficiency').value = data.customData.efficiency;
 }
 
 async function buildFirstPlot([startTraces, layout, frames]) {
@@ -66,14 +67,6 @@ async function buildFirstPlot([startTraces, layout, frames]) {
         frames: frames,
     }).then(() => console.log('finished 1 plot'));
 
-}
-
-async function buildSecondPlot(res) {
-    console.log('started 2 plot');
-    Plotly.react('plot2', {
-        data: res,
-        config: {showSendToCloud: true},
-    }).then(() => console.log('finished 2 plot'));
 }
 
 async function getLayout(data) {
@@ -166,11 +159,9 @@ async function getFullTraces(data) {
 
 async function getSteps(data) {
     let steps = [];
-    const s = getFloatById('s');
 
     for (let i = 0; i < data.graphs[0].x.length; i++) {
-        let label = "Summary: " + data.customData.summary_count[i].toFixed(2) + "\n" +
-            "Current time: " + (s * i).toFixed(1);
+        let label = "workload: " + data.customData.workload[i].toFixed(2);
 
         steps.push({
             label: label,
@@ -193,15 +184,15 @@ async function getFrames(data) {
     for (let i = 0; i < data.graphs[0].x.length; ++i) {
         frames.push({
             name: i,
-            data: data.graphs.map(planet => {
+            data: data.graphs.map(graph => {
                 return {
-                    x: planet.x.slice(0, i),
-                    y: planet.y.slice(0, i),
+                    x: graph.x.slice(0, i),
+                    y: graph.y.slice(0, i),
                     mode: 'markers',
                     marker: {
-                        size: 15,
+                        size: 5,
                         sizemode: 'area',
-                        sizeref: 200000
+                        sizeref: 20000
                     }
                 }
             })

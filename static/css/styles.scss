@@ -22,6 +22,7 @@ body {
   --color-gray-4: #454e56;
   --color-gray-5: #2a2e35;
   --color-gray-6: #12181b;
+  --color-blue: #5cc5ff;
   --br-sm-2: 14px;
   --box-shadow-1: 0 3px 15px rgba(0, 0, 0, .3);
 }
@@ -51,6 +52,10 @@ body {
 }
 
 .input-control {
+
+  .output-parameter {
+    background-color: var(--color-blue);
+  }
 
   input {
     appearance: none;

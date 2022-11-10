@@ -127,9 +127,8 @@ def calculate(time: float, n: int, alpha: float, betta: float, c: int):
 
         x, y, = [], []
         for _t, _m in zip(time_points, m_masked):
-            if _m:
-                x.append(_t)
-                y.append(_m * i)
+            x.append(_t)
+            y.append(_m * (i + 1) if _m else 0)
 
         graphs.append({
             'x': x,
@@ -142,7 +141,7 @@ def calculate(time: float, n: int, alpha: float, betta: float, c: int):
             'cancelled_calls': r,
             'efficiency': efficiency,
             'busy_lines': busy_lines,
-            'summary_count': workload,
+            'workload': workload,
         },
         'graphs': graphs
     }

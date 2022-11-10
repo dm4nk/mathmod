@@ -60,48 +60,43 @@
                     <input type="number" value="1" step="1" id="collectors-capacity" required
                            onkeypress="return charCode!==45">
                 </div>
-                <p>Disable first plot</p>
-                <div class="switch-buttons">
-                    <label class="switch">
-                        <input id="switch-plot" type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+                {#                <p>Disable first plot</p>#}
+                {#                <div class="switch-buttons">#}
+                {#                    <label class="switch">#}
+                {#                        <input id="switch-plot" type="checkbox">#}
+                {#                        <span class="slider round"></span>#}
+                {#                    </label>#}
+                {#                </div>#}
                 <div class="input-control">
                     <input class="submit-btn gradient-background" type="submit" value="Submit">
                 </div>
             </form>
         </div>
-        <div class="container" id="output-container">
+        <div class="container from-container" id="output-container">
+            <p>Output Parameters</p>
             <div class="input-control">
                 <label for="busy-lines">Busy lines</label>
-                <input type="number" value="-1" step="1" id="busy-lines" disabled>
-            </div>
-            <div class="input-control">
-                <label for="capacitors-workload">Capacitor's workload</label>
-                <input type="number" value="-1" step="0.0000000001" id="capacitors-workload" disabled>
+                <input class="output-parameter" type="number" value="-1" step="1" id="busy-lines" disabled>
             </div>
             <div class="input-control">
                 <label for="number-of-calls">Number of calls</label>
-                <input type="number" value="-1" step="1" id="number-of-calls" disabled>
+                <input class="output-parameter" type="number" value="-1" step="1" id="number-of-calls" disabled>
             </div>
             <div class="input-control">
                 <label for="cancelled-calls">Cancelled calls</label>
-                <input type="number" value="-1" step="1" id="cancelled-calls" disabled>
+                <input class="output-parameter" type="number" value="-1" step="1" id="cancelled-calls" disabled>
             </div>
             <div class="input-control">
                 <label for="efficiency">Efficiency</label>
-                <input type="number" value="-1" step="0.0000000001" id="efficiency" disabled>
+                <input class="output-parameter" type="number" value="-1" step="0.0000000001" id="efficiency" disabled>
             </div>
         </div>
 
     </div>
 </div>
-</div>
 
 
 <script src="../static/js/plot.js"></script>
-<script src="../static/js/form-creation.js"></script>
 
 <script>
     const event = new MouseEvent('click', {
@@ -109,7 +104,6 @@
         bubbles: true,
         cancelable: true
     });
-    switchBtn.dispatchEvent(event);
     submitBtn.dispatchEvent(event);
 </script>
 </body>
