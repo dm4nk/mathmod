@@ -95,8 +95,8 @@ async function getLayout(data) {
                 args: [null, {
                     mode: 'immediate',
                     fromcurrent: true,
-                    transition: {duration: 1},
-                    frame: {duration: 1, redraw: false}
+                    transition: {duration: .1},
+                    frame: {duration: .1, redraw: false}
                 }],
                 label: 'Play'
             }, {
@@ -129,11 +129,11 @@ async function getStartTraces(data) {
 
     for (let i = 0; i < data.graphs.length; i++) {
         traces.push({
-            x: [data.graphs[i].x[0]],
-            y: [data.graphs[i].y[0]],
+            x: data.graphs[i].x,
+            y: data.graphs[i].y,
             mode: 'markers',
             marker: {
-                size: 15,
+                size: 5,
                 sizemode: 'area',
                 sizeref: 200000
             }
@@ -141,19 +141,6 @@ async function getStartTraces(data) {
     }
 
     console.log("traces finished");
-    return traces;
-}
-
-async function getFullTraces(data) {
-    let traces = [];
-
-    for (let i = 0; i < data.graphs.length; i++) {
-        traces.push({
-            x: data.graphs[i].x,
-            y: data.graphs[i].y,
-        });
-    }
-    console.log("full traces finished");
     return traces;
 }
 
