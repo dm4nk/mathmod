@@ -22,6 +22,7 @@ def draw_plots():
         betta=float(request_data['power_for_duration']),
         alpha=float(request_data['power_for_time']),
         c=int(request_data['collectors_capacity']),
+        erlang=int(request_data['erlang']),
     )
 
 

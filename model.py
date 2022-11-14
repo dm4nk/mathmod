@@ -84,7 +84,7 @@ def distribution(time: int, n: int, t_array: [float], d_array: [float], c: int):
         return matrix, rejection
 
 
-def calculate(time: float, n: int, alpha: float, betta: float, c: int):
+def calculate(time: float, n: int, alpha: float, betta: float, c: int, erlang: int):
     """
     Функция, рассчитывающая все необходимые значения
     :param time: время моделирования
@@ -112,9 +112,12 @@ def calculate(time: float, n: int, alpha: float, betta: float, c: int):
         t_array.append(t)  # массив моментов
         d_array.append(random.expovariate(betta))  # массив длительностей
 
+    t_array = [a for index, a in enumerate(t_array) if index % erlang == 0]
+    d_array = [a for index, a in enumerate(d_array) if index % erlang == 0]
+
     m, r = distribution(time, n, t_array, d_array, c)
     num = len(t_array)
-    efficiency = r / num
+    efficiency = 1 - r / num
     busy_lines = get_amount_of_busy_line(m)
     workload = get_workload_of_lines(m)
 
@@ -148,4 +151,4 @@ def calculate(time: float, n: int, alpha: float, betta: float, c: int):
 
 
 if __name__ == '__main__':
-    calculate(100, 3, 0.1, 0.1, 2)
+    calculate(100, 3, 0.1, 0.1, 2, 1)

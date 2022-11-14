@@ -14,6 +14,7 @@ submitBtn.addEventListener('click', async function (event) {
     const power_for_duration = getFloatById('power-for-duration');
     const power_for_time = getFloatById('power-for-time');
     const collectors_capacity = getIntById('collectors-capacity');
+    const erlang = getIntById('erlang');
 
     const data = {
         'duration': duration,
@@ -21,6 +22,7 @@ submitBtn.addEventListener('click', async function (event) {
         'power_for_duration': power_for_duration,
         'power_for_time': power_for_time,
         'collectors_capacity': collectors_capacity,
+        'erlang': erlang
     };
 
     console.log("data", data);
@@ -95,8 +97,8 @@ async function getLayout(data) {
                 args: [null, {
                     mode: 'immediate',
                     fromcurrent: true,
-                    transition: {duration: .1},
-                    frame: {duration: .1, redraw: false}
+                    transition: {duration: 0},
+                    frame: {duration: 0, redraw: false}
                 }],
                 label: 'Play'
             }, {
