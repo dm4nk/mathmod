@@ -128,9 +128,21 @@ async function getStartTraces(data) {
     let traces = [];
 
     for (let i = 0; i < data.graphs.length; i++) {
+
+        let indexes = [];
+        data.graphs[i].y.map((_y, index2) => {
+            if (_y > 0) {
+                indexes.push(index2);
+            }
+        });
+
         traces.push({
-            x: data.graphs[i].x,
-            y: data.graphs[i].y,
+            x: data.graphs[i].x.filter((val, index) => {
+                return indexes.includes(index);
+            }),
+            y: data.graphs[i].y.filter((val, index) => {
+                return indexes.includes(index);
+            }),
             mode: 'markers',
             marker: {
                 size: 5,
@@ -168,13 +180,36 @@ async function getSteps(data) {
 async function getFrames(data) {
     let frames = [];
 
+    let tempx = [[], [], []];
+    let tempy = [[], [], []];
+
     for (let i = 0; i < data.graphs[0].x.length; ++i) {
         frames.push({
             name: i,
-            data: data.graphs.map(graph => {
+            data: data.graphs.map((graph, index) => {
+                // if (graph.y[i] > 0) {
+                //     tempy[index] = graph.y.slice(0, i);
+                //     tempx[index] = graph.x.slice(0, i);
+                // }
+
+                let indexes = [];
+                graph.y.slice(0, i).map((_y, index2) => {
+                    if (_y > 0) {
+                        indexes.push(index2);
+                    }
+                });
+
+                tempy[index] = graph.y.filter((val, index) => {
+                    return indexes.includes(index);
+                });
+
+                tempx[index] = graph.x.filter((val, index) => {
+                    return indexes.includes(index);
+                });
+
                 return {
-                    x: graph.x.slice(0, i),
-                    y: graph.y.slice(0, i),
+                    x: tempx[index],
+                    y: tempy[index],
                     mode: 'markers',
                     marker: {
                         size: 5,
