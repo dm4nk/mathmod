@@ -213,6 +213,7 @@ table td {
   border-radius: 50%;
 }
 .container .form .submit-btn {
+  margin-top: 1rem;
   text-align: center;
   color: var(--color-white);
   padding: 0.5rem 1rem;
